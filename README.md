@@ -257,17 +257,6 @@ To run a specific test project:
 dotnet test ./tests/AgriEnergyConnect.Tests.Unit/AgriEnergyConnect.Tests.Unit.csproj
 ```
 
-### Manual Testing
-For manual testing, use the following test accounts:
-
-**Farmer Account:**
-- Username: phalanndwaMunyai
-- Password: Munyai@123
-
-**Employee Account:**
-- Username: employee
-- Password: Employee@123
-
 ## Troubleshooting
 
 ### Common Issues and Solutions
