@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Agri_Energy_Connect.Models.Product>
+
+@{
+    ViewData["Title"] = "All Products";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Products</h1>
+        <div>
+            <a asp-action="FilterProducts" class="btn btn-primary me-2">
+                <i class="bi bi-funnel"></i> Filter Products
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover" id="productsTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Farmer</th>
+                                <th>Production Date</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Organic</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                        {
+                                            <img src="@product.ImageUrl" alt="@product.ProductName" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/products/default.png" alt="@product.ProductName" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                        }
+                                    </td>
+                                    <td>@product.ProductName</td>
+                                    <td>@product.Category.CategoryName</td>
+                                    <td>
+                                        <a asp-action="FarmerDetails" asp-route-id="@product.FarmerId">
+                                            @product.Farmer.FarmName
+                                        </a>
+                                    </td>
+                                    <td>@product.ProductionDate.ToString("d")</td>
+                                    <td>@(product.Quantity.HasValue ? $"{product.Quantity} {product.UnitOfMeasure}" : "N/A")</td>
+                                    <td>@(product.Price.HasValue ? $"{product.Price:C2} {product.CurrencyCode}" : "N/A")</td>
+                                    <td>
+                                        @if (product.OrganicCertified)
+                                        {
+                                            <span class="badge bg-success">Yes</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">No</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-basket text-muted" style="font-size: 4rem;"></i>
+                    </div>
+                    <h3>No Products Found</h3>
+                    <p class="text-muted">There are no products in the system yet.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#productsTable').DataTable({
+                "pageLength": 10,
+                "responsive": true
+            });
+        });
+    </script>
+}

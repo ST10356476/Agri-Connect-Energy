@@ -1,0 +1,337 @@
+﻿@model Agri_Energy_Connect.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Hero Section -->
+<section class="hero-section bg-success text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-3">Connecting Agriculture & Renewable Energy</h1>
+                <p class="lead mb-4">Agri-Energy Connect is a digital ecosystem where farmers and green energy providers collaborate to create sustainable agricultural practices in South Africa.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg px-4 me-md-2">Join Now</a>
+                    <a asp-controller="Home" asp-action="About" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="~/images/sustainable_farming.png" alt="Sustainable Farming" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- What We Offer Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">What We Offer</h2>
+            <p class="lead text-muted">Our platform provides a comprehensive ecosystem for sustainable agriculture</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-success bg-gradient text-white rounded-circle mb-3">
+                            <i class="bi bi-tree"></i>
+                        </div>
+                        <h3 class="fs-4">Sustainable Farming Hub</h3>
+                        <p class="text-muted">Access resources on sustainable farming practices, including organic farming techniques, water conservation methods, and soil health maintenance.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-success bg-gradient text-white rounded-circle mb-3">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+                        <h3 class="fs-4">Green Energy Marketplace</h3>
+                        <p class="text-muted">Discover green energy solutions tailored to agricultural needs, such as solar-powered irrigation systems, wind turbines, and biogas energy solutions.</p>
+                        <div class="mt-3">
+                            <a asp-controller="EnergySolution" asp-action="Index" class="btn btn-success btn-sm">Explore Solutions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-success bg-gradient text-white rounded-circle mb-3">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h3 class="fs-4">Collaboration & Funding</h3>
+                        <p class="text-muted">Connect with experts, collaborate on projects, and discover funding opportunities for green initiatives in agriculture.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Featured Products</h2>
+            <p class="lead text-muted">Discover sustainable agricultural products from our verified farmers</p>
+        </div>
+
+        <div class="row g-4">
+            @if (Model.FeaturedProducts != null && Model.FeaturedProducts.Any())
+            {
+                foreach (var product in Model.FeaturedProducts)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            @if (!string.IsNullOrEmpty(product.ImageUrl))
+                            {
+                                <img src="@product.ImageUrl" class="card-img-top" alt="@product.ProductName" style="height: 200px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <img src="~/images/products/default.png" class="card-img-top" alt="@product.ProductName" style="height: 200px; object-fit: cover;">
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@product.ProductName</h5>
+                                <p class="card-text text-muted">@product.Category.CategoryName</p>
+                                <p class="card-text">
+                                    <small class="text-muted">From: @product.Farmer.FarmName</small>
+                                </p>
+                                @if (product.OrganicCertified)
+                                {
+                                    <span class="badge bg-success">Organic</span>
+                                }
+                            </div>
+                            <div class="card-footer bg-white border-top-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    @if (product.Price.HasValue)
+                                    {
+                                        <span class="fs-5 fw-bold text-success">R @product.Price.Value.ToString("F2")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Price on request</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center">
+                    <p class="text-muted">No featured products available at the moment.</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Featured Farmers Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Featured Farmers</h2>
+            <p class="lead text-muted">Meet the sustainable farmers making a difference</p>
+        </div>
+
+        <div class="row g-4">
+            @if (Model.FeaturedFarmers != null && Model.FeaturedFarmers.Any())
+            {
+                foreach (var farmer in Model.FeaturedFarmers)
+                {
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                @if (!string.IsNullOrEmpty(farmer.ProfileImageUrl))
+                                {
+                                    <img src="@farmer.ProfileImageUrl" alt="@farmer.FarmName" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                }
+                                else
+                                {
+                                    <img src="~/images/farmers/default.png" alt="@farmer.FarmName" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                }
+                                <h3 class="fs-4">@farmer.FarmName</h3>
+                                <p class="text-muted">@farmer.FarmingType</p>
+                                <p class="text-muted"><i class="bi bi-geo-alt"></i> @farmer.City, @farmer.Province</p>
+                                <a href="#" class="btn btn-outline-success">View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center">
+                    <p class="text-muted">No featured farmers available at the moment.</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Green Energy Solutions Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Green Energy Solutions</h2>
+            <p class="lead text-muted">Innovative renewable energy solutions for sustainable agriculture</p>
+        </div>
+
+        <div class="row g-4">
+            @if (Model.FeaturedSolutions != null && Model.FeaturedSolutions.Any())
+            {
+                foreach (var solution in Model.FeaturedSolutions)
+                {
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            @if (!string.IsNullOrEmpty(solution.ImageUrl))
+                            {
+                                <img src="@solution.ImageUrl" class="card-img-top" alt="@solution.SolutionName" style="height: 200px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <img src="~/images/solutions/default.png" class="card-img-top" alt="@solution.SolutionName" style="height: 200px; object-fit: cover;">
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@solution.SolutionName</h5>
+                                <p class="card-text text-muted">@solution.Category.CategoryName</p>
+                                <p class="card-text">@(solution.Description?.Length > 100 ? solution.Description.Substring(0, 100) + "..." : solution.Description)</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="~/images/solutions/solar-irrigation.jpg" class="card-img-top" alt="Solar Irrigation System" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">Solar Irrigation Systems</h5>
+                            <p class="card-text text-muted">Solar</p>
+                            <p class="card-text">Efficient solar-powered irrigation systems designed for farms of all sizes, reducing energy costs and carbon footprint.</p>
+                        </div>
+                        <div class="card-footer bg-white border-top-0">
+                            <div class="d-grid">
+                                <a asp-controller="EnergySolution" asp-action="Index" class="btn btn-outline-success">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="~/images/solutions/biogas-digesters.jpg" class="card-img-top" alt="Biogas Digesters" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">Biogas Digesters</h5>
+                            <p class="card-text text-muted">Biogas</p>
+                            <p class="card-text">Convert farm waste into valuable biogas for heating, cooking, and electricity generation on your property.</p>
+                        </div>
+                        <div class="card-footer bg-white border-top-0">
+                            <div class="d-grid">
+                                <a asp-controller="EnergySolution" asp-action="Index" class="btn btn-outline-success">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="~/images/solutions/wind-turbines.jpg" class="card-img-top" alt="Small Wind Turbines" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">Small Wind Turbines</h5>
+                            <p class="card-text text-muted">Wind</p>
+                            <p class="card-text">Compact wind turbines specially designed for agricultural settings, providing reliable renewable energy.</p>
+                        </div>
+                        <div class="card-footer bg-white border-top-0">
+                            <div class="d-grid">
+                                <a asp-controller="EnergySolution" asp-action="Index" class="btn btn-outline-success">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <!-- View All Energy Solutions Button -->
+        <div class="text-center mt-5">
+            <a asp-controller="EnergySolution" asp-action="Index" class="btn btn-success btn-lg">
+                <i class="bi bi-lightning-charge me-2"></i>View All Energy Solutions
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-5 bg-success text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="fw-bold">Ready to Join the Sustainable Agriculture Movement?</h2>
+                <p class="lead">Connect with farmers and green energy providers to create a more sustainable future for South African agriculture.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg">Sign Up Today</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">What Our Members Say</h2>
+            <p class="lead text-muted">Hear from farmers and energy providers who are part of our community</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="~/images/sunrisefarm.jpg" alt="Testimonial" class="rounded-circle me-3" width="60" height="60">
+                            <div>
+                                <h5 class="mb-0">Thabo Nkosi</h5>
+                                <p class="text-muted mb-0">Organic Farmer, Limpopo</p>
+                            </div>
+                        </div>
+                        <p class="mb-0">"Since implementing solar irrigation from a provider I found on this platform, I've reduced my operational costs by 40% and improved my crop yield significantly."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="~/images/greenvalleyfarm.jpg" alt="Testimonial" class="rounded-circle me-3" width="60" height="60">
+                            <div>
+                                <h5 class="mb-0">Lerato Molefe</h5>
+                                <p class="text-muted mb-0">Solar Solutions Provider, Gauteng</p>
+                            </div>
+                        </div>
+                        <p class="mb-0">"This platform has connected us with farmers who are truly committed to sustainability. We've expanded our client base and made a real impact in rural communities."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="~/images/highlandfarm.jpg" alt="Testimonial" class="rounded-circle me-3" width="60" height="60">
+                            <div>
+                                <h5 class="mb-0">Daniel van der Merwe</h5>
+                                <p class="text-muted mb-0">Livestock Farmer, Western Cape</p>
+                            </div>
+                        </div>
+                        <p class="mb-0">"The biogas system I implemented based on advice from this community has turned my waste management problem into an energy solution. It's a game-changer for my farm."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

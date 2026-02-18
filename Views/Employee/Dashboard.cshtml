@@ -1,0 +1,213 @@
+﻿@model Agri_Energy_Connect.ViewModels.EmployeeDashboardViewModel
+
+@{
+    ViewData["Title"] = "Employee Dashboard";
+}
+
+<div class="container">
+    <h1 class="mb-4">Employee Dashboard</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Total Farmers</h6>
+                            <h2 class="card-text mb-0">@Model.FarmerCount</h2>
+                        </div>
+                        <div>
+                            <i class="bi bi-people-fill" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-success-dark">
+                    <a asp-action="Farmers" class="text-white text-decoration-none">
+                        <small>View All <i class="bi bi-arrow-right ms-1"></i></small>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Total Products</h6>
+                            <h2 class="card-text mb-0">@Model.ProductCount</h2>
+                        </div>
+                        <div>
+                            <i class="bi bi-basket3-fill" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-primary-dark">
+                    <a asp-action="Products" class="text-white text-decoration-none">
+                        <small>View All <i class="bi bi-arrow-right ms-1"></i></small>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card bg-warning text-dark h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-dark-50">Recent Registration</h6>
+                            <h2 class="card-text mb-0">3</h2>
+                        </div>
+                        <div>
+                            <i class="bi bi-calendar-check" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-warning-dark">
+                    <a href="#" class="text-dark text-decoration-none">
+                        <small>View Details <i class="bi bi-arrow-right ms-1"></i></small>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card bg-info text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Recently Added Products</h6>
+                            <h2 class="card-text mb-0">8</h2>
+                        </div>
+                        <div>
+                            <i class="bi bi-graph-up" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-info-dark">
+                    <a href="#" class="text-white text-decoration-none">
+                        <small>View Details <i class="bi bi-arrow-right ms-1"></i></small>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12 col-lg-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Recent Farmers</h5>
+                    <a asp-action="Farmers" class="btn btn-sm btn-outline-success">View All</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentFarmers != null && Model.RecentFarmers.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Farm Name</th>
+                                        <th>Location</th>
+                                        <th>Farming Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var farmer in Model.RecentFarmers)
+                                    {
+                                        <tr>
+                                            <td>@farmer.FarmName</td>
+                                            <td>@farmer.City, @farmer.Province</td>
+                                            <td>@farmer.FarmingType</td>
+                                            <td>
+                                                <a asp-action="FarmerDetails" asp-route-id="@farmer.FarmerId" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <p class="text-muted">No farmers registered yet.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-lg-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Recent Products</h5>
+                    <a asp-action="Products" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentProducts != null && Model.RecentProducts.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Farmer</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Model.RecentProducts)
+                                    {
+                                        <tr>
+                                            <td>@product.ProductName</td>
+                                            <td>@product.Category.CategoryName</td>
+                                            <td>@product.Farmer.FarmName</td>
+                                            <td>@product.ProductionDate.ToString("d")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <p class="text-muted">No products added yet.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <a asp-action="AddFarmer" class="btn btn-success w-100 p-3">
+                                <i class="bi bi-person-plus-fill me-2"></i> Add New Farmer
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a asp-action="FilterProducts" class="btn btn-primary w-100 p-3">
+                                <i class="bi bi-search me-2"></i> Filter Products
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a href="#" class="btn btn-info text-white w-100 p-3">
+                                <i class="bi bi-file-earmark-text me-2"></i> Generate Reports
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

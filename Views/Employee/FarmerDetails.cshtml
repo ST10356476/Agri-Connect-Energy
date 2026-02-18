@@ -1,0 +1,211 @@
+﻿@model Agri_Energy_Connect.Models.Farmer
+
+@{
+    ViewData["Title"] = "Farmer Details";
+}
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>@Model.FarmName</h1>
+                <div>
+                    <a asp-action="Farmers" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                    {
+                        <img src="@Model.ProfileImageUrl" alt="@Model.FarmName" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <img src="~/images/farmers/default.png" alt="@Model.FarmName" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    }
+                    <h3>@Model.FarmName</h3>
+                    <p class="text-muted">@Model.FarmingType</p>
+                    <p>@Model.City, @Model.Province</p>
+
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="mailto:@Model.User.Email" class="btn btn-outline-primary">
+                            <i class="bi bi-envelope"></i> @Model.User.Email
+                        </a>
+                        @if (!string.IsNullOrEmpty(Model.User.PhoneNumber))
+                        {
+                            <a href="tel:@Model.User.PhoneNumber" class="btn btn-outline-primary">
+                                <i class="bi bi-telephone"></i> @Model.User.PhoneNumber
+                            </a>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="mb-2">
+                        <strong>Verification Status:</strong>
+                        @if (Model.IsVerified)
+                        {
+                            <span class="badge bg-success">Verified</span>
+                        }
+                        else
+                        {
+                            <form asp-action="VerifyFarmer" asp-route-id="@Model.FarmerId" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    <i class="bi bi-check-circle"></i> Verify Farmer
+                                </button>
+                            </form>
+                        }
+                    </div>
+                    <small class="text-muted">Joined @Model.CreatedDate.ToString("MMMM d, yyyy")</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light">
+                    <h4>Farm Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Established:</strong> @(Model.EstablishedDate.HasValue ? Model.EstablishedDate.Value.ToString("MMMM yyyy") : "Not specified")</p>
+                            <p><strong>Registration:</strong> @(string.IsNullOrEmpty(Model.RegistrationNumber) ? "Not specified" : Model.RegistrationNumber)</p>
+                            <p><strong>Farm Size:</strong> @(Model.FarmSize.HasValue ? $"{Model.FarmSize} {Model.FarmSizeUnit}" : "Not specified")</p>
+                            <p><strong>Main Crops:</strong> @(string.IsNullOrEmpty(Model.MainCrops) ? "Not specified" : Model.MainCrops)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Location:</strong> @Model.Address, @Model.City, @Model.Province @Model.PostalCode</p>
+                            <p><strong>Main Livestock:</strong> @(string.IsNullOrEmpty(Model.MainLivestock) ? "Not specified" : Model.MainLivestock)</p>
+                            <p><strong>Farming Type:</strong> @Model.FarmingType</p>
+                            <p><strong>Farmer:</strong> @($"{Model.User.FirstName} {Model.User.LastName}")</p>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <h5>Description</h5>
+                            <p>@(string.IsNullOrEmpty(Model.ProfileDescription) ? "No description provided." : Model.ProfileDescription)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light">
+                    <h4>Sustainability Practices</h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.SustainabilityPractices))
+                    {
+                        <p>@Model.SustainabilityPractices</p>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <p class="text-muted">No sustainability practices specified yet.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light">
+                    <h4>Energy Needs</h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.EnergyNeeds))
+                    {
+                        <p>@Model.EnergyNeeds</p>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <p class="text-muted">No energy needs specified yet.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h4>Products</h4>
+                </div>
+                <div class="card-body">
+                    @if (Model.Products != null && Model.Products.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Product Name</th>
+                                        <th>Category</th>
+                                        <th>Production Date</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Model.Products)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                                {
+                                                    <img src="@product.ImageUrl" alt="@product.ProductName" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/images/products/default.png" alt="@product.ProductName" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                                }
+                                            </td>
+                                            <td>@product.ProductName</td>
+                                            <td>@product.Category.CategoryName</td>
+                                            <td>@product.ProductionDate.ToString("d")</td>
+                                            <td>@(product.Quantity.HasValue ? $"{product.Quantity} {product.UnitOfMeasure}" : "N/A")</td>
+                                            <td>@(product.Price.HasValue ? $"{product.Price:C} {product.CurrencyCode}" : "N/A")</td>
+                                            <td>
+                                                @if (product.IsAvailable)
+                                                {
+                                                    <span class="badge bg-success">Available</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">Not Available</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <p class="text-muted">No products added yet.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

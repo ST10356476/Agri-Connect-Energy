@@ -1,0 +1,159 @@
+﻿@using Agri_Energy_Connect.ViewModels
+@model Agri_Energy_Connect.ViewModels.MultipleQuoteRequestViewModel
+
+@{
+    ViewData["Title"] = "Request Multiple Quotes";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <h1 class="fw-bold">Request Multiple Quotes</h1>
+                <p class="lead text-muted">Get quotes for @Model.Solutions.Count selected solutions</p>
+            </div>
+
+            <!-- Selected Solutions Summary -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Selected Solutions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach (var solution in Model.Solutions)
+                        {
+                            <div class="col-md-6 mb-3">
+                                <div class="card border-success">
+                                    <div class="card-body">
+                                        <h6 class="card-title">@solution.SolutionName</h6>
+                                        <p class="card-text small text-muted">@solution.Provider.CompanyName</p>
+                                        <span class="badge bg-@GetCategoryBadgeClass(solution.Category.CategoryName)">
+                                            @solution.Category.CategoryName
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quote Request Form -->
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <form asp-action="ProcessMultipleQuotes" method="post">
+                        <!-- Hidden solution IDs -->
+                        @foreach (var id in Model.SolutionIds)
+                        {
+                            <input type="hidden" name="SolutionIds" value="@id" />
+                        }
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- Personal Information -->
+                        <div class="mb-4">
+                            <h3 class="h5 text-success mb-3">Your Information</h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="QuoteRequest.Name" class="form-label fw-medium"></label>
+                                    <input asp-for="QuoteRequest.Name" class="form-control" />
+                                    <span asp-validation-for="QuoteRequest.Name" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="QuoteRequest.Email" class="form-label fw-medium"></label>
+                                    <input asp-for="QuoteRequest.Email" class="form-control" />
+                                    <span asp-validation-for="QuoteRequest.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="QuoteRequest.PhoneNumber" class="form-label fw-medium"></label>
+                                    <input asp-for="QuoteRequest.PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="QuoteRequest.PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="QuoteRequest.PreferredContact" class="form-label fw-medium"></label>
+                                    <select asp-for="QuoteRequest.PreferredContact" class="form-select" asp-items="Html.GetEnumSelectList<ContactMethod>()">
+                                        <option value="">Select preferred contact method</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Farm Information -->
+                        <div class="mb-4">
+                            <h3 class="h5 text-success mb-3">Farm Details</h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="QuoteRequest.FarmSize" class="form-label fw-medium"></label>
+                                    <div class="input-group">
+                                        <input asp-for="QuoteRequest.FarmSize" class="form-control" type="number" step="0.1" />
+                                        <span class="input-group-text">hectares</span>
+                                    </div>
+                                    <span asp-validation-for="QuoteRequest.FarmSize" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="QuoteRequest.CurrentEnergyUsage" class="form-label fw-medium"></label>
+                                    <div class="input-group">
+                                        <input asp-for="QuoteRequest.CurrentEnergyUsage" class="form-control" type="number" />
+                                        <span class="input-group-text">kWh/month</span>
+                                    </div>
+                                    <span asp-validation-for="QuoteRequest.CurrentEnergyUsage" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Requirements -->
+                        <div class="mb-4">
+                            <h3 class="h5 text-success mb-3">Additional Information</h3>
+                            <div class="mb-3">
+                                <label asp-for="QuoteRequest.AdditionalRequirements" class="form-label fw-medium"></label>
+                                <textarea asp-for="QuoteRequest.AdditionalRequirements" class="form-control" rows="4"
+                                          placeholder="Describe your needs, current infrastructure, or any specific requirements..."></textarea>
+                                <span asp-validation-for="QuoteRequest.AdditionalRequirements" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="AdditionalMessage" class="form-label fw-medium"></label>
+                                <textarea asp-for="AdditionalMessage" class="form-control" rows="3"
+                                          placeholder="Any additional message for the providers regarding your multiple quote request..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Compare" asp-route-solutionIds="@string.Join(",", Model.SolutionIds)"
+                               class="btn btn-outline-secondary me-md-2">
+                                <i class="bi bi-arrow-left"></i> Back to Comparison
+                            </a>
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="bi bi-send"></i> Request All Quotes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetCategoryBadgeClass(string categoryName)
+    {
+        return categoryName.ToLower() switch
+        {
+            "solar" => "success",
+            "wind" => "info",
+            "biogas" => "warning",
+            "hydro" => "primary",
+            "hybrid" => "secondary",
+            "energy efficiency" => "danger",
+            _ => "secondary"
+        };
+    }
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Agri_Energy_Connect.Models.Farmer>
+
+@{
+    ViewData["Title"] = "Manage Farmers";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Farmers</h1>
+        <a asp-action="AddFarmer" class="btn btn-success">
+            <i class="bi bi-person-plus-fill"></i> Add Farmer
+        </a>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover" id="farmersTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Farm Name</th>
+                                <th>Farmer</th>
+                                <th>Contact</th>
+                                <th>Location</th>
+                                <th>Farming Type</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var farmer in Model)
+                            {
+                                <tr>
+                                    <td>@farmer.FarmName</td>
+                                    <td>@($"{farmer.User.FirstName} {farmer.User.LastName}")</td>
+                                    <td>
+                                        <a href="mailto:@farmer.User.Email">@farmer.User.Email</a><br />
+                                        @farmer.User.PhoneNumber
+                                    </td>
+                                    <td>@farmer.City, @farmer.Province</td>
+                                    <td>@farmer.FarmingType</td>
+                                    <td>
+                                        @if (farmer.IsVerified)
+                                        {
+                                            <span class="badge bg-success">Verified</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a asp-action="FarmerDetails" asp-route-id="@farmer.FarmerId" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-people text-muted" style="font-size: 4rem;"></i>
+                    </div>
+                    <h3>No Farmers Found</h3>
+                    <p class="text-muted">There are no farmers registered in the system yet.</p>
+                    <a asp-action="AddFarmer" class="btn btn-success mt-3">
+                        <i class="bi bi-person-plus-fill"></i> Add Your First Farmer
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#farmersTable').DataTable({
+                "pageLength": 10,
+                "responsive": true
+            });
+        });
+    </script>
+}

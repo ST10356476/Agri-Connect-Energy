@@ -1,0 +1,208 @@
+﻿@using Agri_Energy_Connect.ViewModels
+@model Agri_Energy_Connect.ViewModels.QuoteRequestModel
+
+@{
+    ViewData["Title"] = "Request Quote";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <h1 class="fw-bold">Request a Quote</h1>
+                <p class="lead text-muted">Get a personalized quote for your renewable energy solution</p>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    @if (Model.SolutionId > 0)
+                    {
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> You're requesting a quote for a specific energy solution. Our experts will provide detailed pricing and implementation information.
+                        </div>
+                    }
+
+                    <form asp-action="RequestQuote" method="post">
+                        <input type="hidden" asp-for="SolutionId" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- Personal Information Section -->
+                        <div class="mb-4">
+                            <h3 class="h5 text-success mb-3">Personal Information</h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Name" class="form-label fw-medium"></label>
+                                    <input asp-for="Name" class="form-control" placeholder="Enter your full name" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Email" class="form-label fw-medium"></label>
+                                    <input asp-for="Email" class="form-control" placeholder="Enter your email address" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="PhoneNumber" class="form-label fw-medium"></label>
+                                    <input asp-for="PhoneNumber" class="form-control" placeholder="Enter your phone number" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="PreferredContact" class="form-label fw-medium"></label>
+                                    <select asp-for="PreferredContact" class="form-select" asp-items="Html.GetEnumSelectList<ContactMethod>()">
+                                        <option value="">Select preferred contact method</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="ContactTime" class="form-label fw-medium"></label>
+                                <input asp-for="ContactTime" class="form-control" placeholder="e.g., Weekdays 9 AM - 5 PM" />
+                            </div>
+                        </div>
+
+                        <!-- Farm Information Section -->
+                        <div class="mb-4">
+                            <h3 class="h5 text-success mb-3">Farm Information</h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="FarmSize" class="form-label fw-medium"></label>
+                                    <div class="input-group">
+                                        <input asp-for="FarmSize" class="form-control" type="number" step="0.1" placeholder="Enter farm size" />
+                                        <span class="input-group-text">hectares</span>
+                                    </div>
+                                    <span asp-validation-for="FarmSize" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="CurrentEnergyUsage" class="form-label fw-medium"></label>
+                                    <div class="input-group">
+                                        <input asp-for="CurrentEnergyUsage" class="form-control" type="number" step="1" placeholder="Enter monthly usage" />
+                                        <span class="input-group-text">kWh/month</span>
+                                    </div>
+                                    <span asp-validation-for="CurrentEnergyUsage" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Requirements Section -->
+                        <div class="mb-4">
+                            <h3 class="h5 text-success mb-3">Additional Requirements</h3>
+                            <div class="mb-3">
+                                <label asp-for="AdditionalRequirements" class="form-label fw-medium"></label>
+                                <textarea asp-for="AdditionalRequirements" class="form-control" rows="4" placeholder="Please describe your specific needs, current energy infrastructure, desired outcomes, or any questions you have..."></textarea>
+                                <span asp-validation-for="AdditionalRequirements" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Interest Areas (for general quotes) -->
+                        @if (Model.SolutionId == 0)
+                        {
+                            <div class="mb-4">
+                                <h3 class="h5 text-success mb-3">Areas of Interest</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" value="solar" id="interestSolar" name="InterestAreas">
+                                            <label class="form-check-label" for="interestSolar">
+                                                <i class="bi bi-sun"></i> Solar Energy Solutions
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" value="wind" id="interestWind" name="InterestAreas">
+                                            <label class="form-check-label" for="interestWind">
+                                                <i class="bi bi-wind"></i> Wind Energy Solutions
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" value="biogas" id="interestBiogas" name="InterestAreas">
+                                            <label class="form-check-label" for="interestBiogas">
+                                                <i class="bi bi-recycle"></i> Biogas Solutions
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" value="hydro" id="interestHydro" name="InterestAreas">
+                                            <label class="form-check-label" for="interestHydro">
+                                                <i class="bi bi-droplet"></i> Hydroelectric Solutions
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" value="hybrid" id="interestHybrid" name="InterestAreas">
+                                            <label class="form-check-label" for="interestHybrid">
+                                                <i class="bi bi-layers"></i> Hybrid Systems
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" value="efficiency" id="interestEfficiency" name="InterestAreas">
+                                            <label class="form-check-label" for="interestEfficiency">
+                                                <i class="bi bi-lightning"></i> Energy Efficiency
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Terms and Conditions -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                <label class="form-check-label" for="agreeTerms">
+                                    I agree to the <a href="#" class="text-success">Terms of Service</a> and <a href="#" class="text-success">Privacy Policy</a>, and consent to be contacted regarding my quote request.
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-controller="EnergySolution" asp-action="Index" class="btn btn-outline-secondary me-md-2">
+                                <i class="bi bi-arrow-left"></i> Back to Solutions
+                            </a>
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="bi bi-send"></i> Submit Quote Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Why Choose Us Section -->
+            <div class="mt-5">
+                <div class="card border-0 bg-light">
+                    <div class="card-body p-4">
+                        <h3 class="h5 text-center mb-4">Why Choose Our Energy Solutions?</h3>
+                        <div class="row text-center">
+                            <div class="col-md-3 mb-3">
+                                <i class="bi bi-award text-success" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Verified Providers</h6>
+                                <small class="text-muted">All our providers are certified and verified</small>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <i class="bi bi-clock text-success" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Quick Response</h6>
+                                <small class="text-muted">Providers respond within 24 hours</small>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <i class="bi bi-shield-check text-success" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Best Prices</h6>
+                                <small class="text-muted">Competitive pricing guaranteed</small>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <i class="bi bi-headset text-success" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Expert Support</h6>
+                                <small class="text-muted">Ongoing support and maintenance</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

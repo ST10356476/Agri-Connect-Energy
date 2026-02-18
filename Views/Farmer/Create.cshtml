@@ -1,0 +1,111 @@
+﻿@model Agri_Energy_Connect.ViewModels.FarmerViewModel
+
+@{
+    ViewData["Title"] = "Complete Your Profile";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h2 class="card-title">Complete Your Farm Profile</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h4 class="mb-3">Farm Details</h4>
+                                <hr />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="FarmSize" class="form-label"></label>
+                                <input asp-for="FarmSize" class="form-control" type="number" step="0.01" />
+                                <span asp-validation-for="FarmSize" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="FarmSizeUnit" class="form-label"></label>
+                                <select asp-for="FarmSizeUnit" class="form-select">
+                                    <option value="">Select Unit</option>
+                                    <option value="hectares">Hectares</option>
+                                    <option value="acres">Acres</option>
+                                    <option value="sq. km">Square Kilometers</option>
+                                </select>
+                                <span asp-validation-for="FarmSizeUnit" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="FarmingType" class="form-label"></label>
+                                <select asp-for="FarmingType" class="form-select">
+                                    <option value="">Select Farming Type</option>
+                                    <option value="Crop Farming">Crop Farming</option>
+                                    <option value="Livestock Farming">Livestock Farming</option>
+                                    <option value="Mixed Farming">Mixed Farming</option>
+                                    <option value="Organic Farming">Organic Farming</option>
+                                    <option value="Agroforestry">Agroforestry</option>
+                                    <option value="Aquaculture">Aquaculture</option>
+                                    <option value="Apiculture">Apiculture</option>
+                                    <option value="Viticulture">Viticulture</option>
+                                    <option value="Horticulture">Horticulture</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span asp-validation-for="FarmingType" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="MainCrops" class="form-label"></label>
+                                <input asp-for="MainCrops" class="form-control" placeholder="E.g. Maize, Wheat, Vegetables" />
+                                <span asp-validation-for="MainCrops" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="MainLivestock" class="form-label"></label>
+                                <input asp-for="MainLivestock" class="form-control" placeholder="E.g. Cattle, Sheep, Poultry" />
+                                <span asp-validation-for="MainLivestock" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h4 class="mb-3">Sustainability & Energy</h4>
+                                <hr />
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="SustainabilityPractices" class="form-label"></label>
+                                <textarea asp-for="SustainabilityPractices" class="form-control" rows="4" placeholder="Describe your sustainable farming practices, including water conservation, soil management, etc."></textarea>
+                                <span asp-validation-for="SustainabilityPractices" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="EnergyNeeds" class="form-label"></label>
+                                <textarea asp-for="EnergyNeeds" class="form-control" rows="4" placeholder="Describe your current energy usage and future needs for your farm operations."></textarea>
+                                <span asp-validation-for="EnergyNeeds" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h4 class="mb-3">Farm Description</h4>
+                                <hr />
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="ProfileDescription" class="form-label"></label>
+                                <textarea asp-for="ProfileDescription" class="form-control" rows="6" placeholder="Tell us about your farm, its history, operations, and what makes it special."></textarea>
+                                <span asp-validation-for="ProfileDescription" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">Save Profile</button>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

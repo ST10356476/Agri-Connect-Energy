@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Agri_Energy_Connect.Models.Product>
+
+@{
+    ViewData["Title"] = "My Products";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>My Products</h1>
+        <a asp-action="AddProduct" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Add Product
+        </a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Production Date</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                        {
+                                            <img src="@product.ImageUrl" alt="@product.ProductName" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/products/default.png" alt="@product.ProductName" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                        }
+                                    </td>
+                                    <td>@product.ProductName</td>
+                                    <td>@product.Category.CategoryName</td>
+                                    <td>@product.ProductionDate.ToString("d")</td>
+                                    <td>@(product.Quantity.HasValue ? $"{product.Quantity} {product.UnitOfMeasure}" : "N/A")</td>
+                                    <td>@(product.Price.HasValue ? $"{product.Price:C} {product.CurrencyCode}" : "N/A")</td>
+                                    <td>
+                                        @if (product.IsAvailable)
+                                        {
+                                            <span class="badge bg-success">Available</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Not Available</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a asp-action="EditProduct" asp-route-id="@product.ProductId" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-@product.ProductId">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- Delete Confirmation Modal -->
+                                        <div class="modal fade" id="deleteModal-@product.ProductId" tabindex="-1" aria-labelledby="deleteModalLabel-@product.ProductId" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteModalLabel-@product.ProductId">Confirm Delete</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete the product "@product.ProductName"?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <form asp-action="DeleteProduct" asp-route-id="@product.ProductId" method="post">
+                                                            @Html.AntiForgeryToken()
+                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card shadow">
+            <div class="card-body text-center py-5">
+                <div class="mb-4">
+                    <i class="bi bi-basket text-muted" style="font-size: 4rem;"></i>
+                </div>
+                <h3>No Products Found</h3>
+                <p class="text-muted">You haven't added any products yet.</p>
+                <a asp-action="AddProduct" class="btn btn-success mt-3">
+                    <i class="bi bi-plus-circle"></i> Add Your First Product
+                </a>
+            </div>
+        </div>
+    }
+</div>

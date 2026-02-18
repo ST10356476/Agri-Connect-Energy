@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="text-center mb-4">Contact Us</h1>
+
+            <div class="row mb-5">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <div class="bg-light rounded-circle mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="bi bi-geo-alt text-success" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h5 mt-3">Visit Us</h3>
+                    <p class="text-muted">
+                        123 Innovation Hub<br>
+                        Eco Park, Pretoria<br>
+                        Gauteng, South Africa
+                    </p>
+                </div>
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <div class="bg-light rounded-circle mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="bi bi-envelope text-success" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h5 mt-3">Email Us</h3>
+                    <p class="text-muted">
+                        info@agrienergyconnect.co.za<br>
+                        support@agrienergyconnect.co.za
+                    </p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="bg-light rounded-circle mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="bi bi-telephone text-success" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h5 mt-3">Call Us</h3>
+                    <p class="text-muted">
+                        +27 (0)12 345 6789<br>
+                        +27 (0)83 456 7890
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="h4 text-center mb-4">Get In Touch</h2>
+
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label for="name" class="form-label">Your Name</label>
+                                <input type="text" class="form-control" id="name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="subject" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-5">
+                <div class="card-body p-4">
+                    <h2 class="h4 text-center mb-4">Our Location</h2>
+                    <!-- Placeholder for Google Maps Integration -->
+                    <div class="bg-light text-center py-5">
+                        <p class="text-muted mb-0">Map will be displayed here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

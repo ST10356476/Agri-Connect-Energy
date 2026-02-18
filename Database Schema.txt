@@ -1,0 +1,175 @@
+-- Database: AgriEnergyConnect
+
+-- User Roles Table
+CREATE TABLE [dbo].[Roles] (
+    [RoleId] INT IDENTITY(1,1) PRIMARY KEY,
+    [RoleName] NVARCHAR(50) NOT NULL UNIQUE,
+    [Description] NVARCHAR(200) NULL,
+    [CreatedDate] DATETIME2 NOT NULL DEFAULT GETDATE(),
+    [IsActive] BIT NOT NULL DEFAULT 1
+);
+
+-- Users Table
+CREATE TABLE [dbo].[Users] (
+    [UserId] INT IDENTITY(1,1) PRIMARY KEY,
+    [Username] NVARCHAR(100) NOT NULL UNIQUE,
+    [Email] NVARCHAR(150) NOT NULL UNIQUE,
+    [PasswordHash] NVARCHAR(MAX) NOT NULL,
+    [PasswordSalt] NVARCHAR(MAX) NOT NULL,
+    [FirstName] NVARCHAR(100) NULL,
+    [LastName] NVARCHAR(100) NULL,
+    [PhoneNumber] NVARCHAR(20) NULL,
+    [RoleId] INT NOT NULL REFERENCES [dbo].[Roles] ([RoleId]),
+    [CreatedDate] DATETIME2 NOT NULL DEFAULT GETDATE(),
+    [LastLoginDate] DATETIME2 NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1
+);
+
+-- Farmers Table
+CREATE TABLE [dbo].[Farmers] (
+    [FarmerId] INT IDENTITY(1,1) PRIMARY KEY,
+    [UserId] INT NOT NULL UNIQUE REFERENCES [dbo].[Users] ([UserId]),
+    [FarmName] NVARCHAR(150) NOT NULL,
+    [RegistrationNumber] NVARCHAR(50) NULL,
+    [EstablishedDate] DATE NULL,
+    [Address] NVARCHAR(200) NULL,
+    [City] NVARCHAR(100) NULL,
+    [Province] NVARCHAR(100) NULL,
+    [PostalCode] NVARCHAR(20) NULL,
+    [GeoLocation] GEOGRAPHY NULL,
+    [FarmSize] DECIMAL(10, 2) NULL,
+    [FarmSizeUnit] NVARCHAR(20) NULL,
+    [FarmingType] NVARCHAR(100) NULL,
+    [MainCrops] NVARCHAR(200) NULL,
+    [MainLivestock] NVARCHAR(200) NULL,
+    [SustainabilityPractices] NVARCHAR(MAX) NULL,
+    [ProfileDescription] NVARCHAR(MAX) NULL,
+    [ProfileImageUrl] NVARCHAR(500) NULL,
+    [EnergyNeeds] NVARCHAR(MAX) NULL,
+    [CreatedDate] DATETIME2 NOT NULL DEFAULT GETDATE(),
+    [LastUpdatedDate] DATETIME2 NULL,
+    [IsVerified] BIT NOT NULL DEFAULT 0
+);
+
+-- Product Categories Table
+CREATE TABLE [dbo].[ProductCategories] (
+    [CategoryId] INT IDENTITY(1,1) PRIMARY KEY,
+    [CategoryName] NVARCHAR(100) NOT NULL UNIQUE,
+    [Description] NVARCHAR(500) NULL,
+    [ParentCategoryId] INT NULL REFERENCES [dbo].[ProductCategories] ([CategoryId]),
+    [IsActive] BIT NOT NULL DEFAULT 1
+);
+
+-- Products Table
+CREATE TABLE [dbo].[Products] (
+    [ProductId] INT IDENTITY(1,1) PRIMARY KEY,
+    [FarmerId] INT NOT NULL REFERENCES [dbo].[Farmers] ([FarmerId]),
+    [ProductName] NVARCHAR(150) NOT NULL,
+    [CategoryId] INT NOT NULL REFERENCES [dbo].[ProductCategories] ([CategoryId]),
+    [Description] NVARCHAR(MAX) NULL,
+    [ProductionDate] DATE NOT NULL,
+    [Quantity] DECIMAL(10, 2) NULL,
+    [UnitOfMeasure] NVARCHAR(30) NULL,
+    [Price] DECIMAL(10, 2) NULL,
+    [CurrencyCode] NVARCHAR(3) NULL DEFAULT 'ZAR',
+    [SustainabilityFeatures] NVARCHAR(MAX) NULL,
+    [OrganicCertified] BIT NOT NULL DEFAULT 0,
+    [ImageUrl] NVARCHAR(500) NULL,
+    [IsAvailable] BIT NOT NULL DEFAULT 1,
+    [CreatedDate] DATETIME2 NOT NULL DEFAULT GETDATE(),
+    [LastUpdatedDate] DATETIME2 NULL
+);
+
+-- Employees Table
+CREATE TABLE [dbo].[Employees] (
+    [EmployeeId] INT IDENTITY(1,1) PRIMARY KEY,
+    [UserId] INT NOT NULL UNIQUE REFERENCES [dbo].[Users] ([UserId]),
+    [EmployeeNumber] NVARCHAR(50) NULL,
+    [Department] NVARCHAR(100) NULL,
+    [Position] NVARCHAR(100) NULL,
+    [HireDate] DATE NULL,
+    [SupervisorId] INT NULL REFERENCES [dbo].[Employees] ([EmployeeId]),
+    [OfficeLocation] NVARCHAR(100) NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1
+);
+
+-- Energy Solution Categories Table
+CREATE TABLE [dbo].[EnergySolutionCategories] (
+    [CategoryId] INT IDENTITY(1,1) PRIMARY KEY,
+    [CategoryName] NVARCHAR(100) NOT NULL UNIQUE,
+    [Description] NVARCHAR(500) NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1
+);
+
+-- Energy Solution Providers Table
+CREATE TABLE [dbo].[EnergySolutionProviders] (
+    [ProviderId] INT IDENTITY(1,1) PRIMARY KEY,
+    [CompanyName] NVARCHAR(150) NOT NULL,
+    [ContactPerson] NVARCHAR(100) NULL,
+    [Email] NVARCHAR(150) NOT NULL,
+    [PhoneNumber] NVARCHAR(20) NULL,
+    [Website] NVARCHAR(200) NULL,
+    [Address] NVARCHAR(200) NULL,
+    [City] NVARCHAR(100) NULL,
+    [Province] NVARCHAR(100) NULL,
+    [PostalCode] NVARCHAR(20) NULL,
+    [RegistrationNumber] NVARCHAR(50) NULL,
+    [YearEstablished] INT NULL,
+    [Description] NVARCHAR(MAX) NULL,
+    [LogoUrl] NVARCHAR(500) NULL,
+    [IsVerified] BIT NOT NULL DEFAULT 0,
+    [CreatedDate] DATETIME2 NOT NULL DEFAULT GETDATE(),
+    [LastUpdatedDate] DATETIME2 NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1
+);
+
+-- Energy Solutions Table
+CREATE TABLE [dbo].[EnergySolutions] (
+    [SolutionId] INT IDENTITY(1,1) PRIMARY KEY,
+    [ProviderId] INT NOT NULL REFERENCES [dbo].[EnergySolutionProviders] ([ProviderId]),
+    [CategoryId] INT NOT NULL REFERENCES [dbo].[EnergySolutionCategories] ([CategoryId]),
+    [SolutionName] NVARCHAR(150) NOT NULL,
+    [Description] NVARCHAR(MAX) NULL,
+    [Specifications] NVARCHAR(MAX) NULL,
+    [InstallationRequirements] NVARCHAR(MAX) NULL,
+    [MaintenanceInfo] NVARCHAR(MAX) NULL,
+    [CostEstimate] NVARCHAR(100) NULL,
+    [PriceRangeMin] DECIMAL(10, 2) NULL,
+    [PriceRangeMax] DECIMAL(10, 2) NULL,
+    [CurrencyCode] NVARCHAR(3) NULL DEFAULT 'ZAR',
+    [ROIEstimate] NVARCHAR(100) NULL,
+    [ApplicationAreas] NVARCHAR(MAX) NULL,
+    [ImageUrl] NVARCHAR(500) NULL,
+    [BrochureUrl] NVARCHAR(500) NULL,
+    [IsAvailable] BIT NOT NULL DEFAULT 1,
+    [CreatedDate] DATETIME2 NOT NULL DEFAULT GETDATE(),
+    [LastUpdatedDate] DATETIME2 NULL
+);
+
+-- Seed Data for User Roles
+INSERT INTO [dbo].[Roles] ([RoleName], [Description])
+VALUES 
+('Administrator', 'System administrator with full access'),
+('Employee', 'Staff member with management capabilities'),
+('Farmer', 'Agricultural producer with product management capabilities'),
+('EnergyProvider', 'Provider of green energy solutions');
+
+-- Seed Data for Product Categories
+INSERT INTO [dbo].[ProductCategories] ([CategoryName], [Description])
+VALUES 
+('Fruits', 'Fresh fruits and fruit products'),
+('Vegetables', 'Fresh vegetables and vegetable products'),
+('Grains', 'Grains, cereals, and related products'),
+('Livestock', 'Live animals and animal products'),
+('Dairy', 'Milk and dairy products'),
+('Other', 'Miscellaneous agricultural products');
+
+-- Seed Data for Energy Solution Categories
+INSERT INTO [dbo].[EnergySolutionCategories] ([CategoryName], [Description])
+VALUES 
+('Solar', 'Solar power solutions including PV panels and thermal systems'),
+('Wind', 'Wind turbines and wind power systems'),
+('Biogas', 'Biogas digesters and energy systems'),
+('Hydro', 'Small-scale hydroelectric systems'),
+('Hybrid', 'Combined renewable energy systems'),
+('Energy Efficiency', 'Solutions to reduce energy consumption');

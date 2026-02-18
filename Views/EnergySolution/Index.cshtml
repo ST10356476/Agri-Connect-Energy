@@ -1,0 +1,444 @@
+﻿@model Agri_Energy_Connect.ViewModels.EnergySolutionsViewModel
+
+@{
+    ViewData["Title"] = "Green Energy Solutions";
+}
+
+<!-- Hero Section -->
+<section class="hero-section bg-success text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-3">Innovative Green Energy Solutions</h1>
+                <p class="lead mb-4">Discover renewable energy technologies tailored for South African agriculture. From solar to wind, biogas to micro-hydro - find the perfect sustainable solution for your farm.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a asp-controller="EnergySolution" asp-action="RequestQuote" class="btn btn-light btn-lg px-4 me-md-2">Get a Quote</a>
+                    <a asp-controller="EnergySolution" asp-action="Compare" class="btn btn-outline-light btn-lg px-4">Compare Solutions</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="~/images/renewablefarming.jpeg" alt="Renewable Energy Farm" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Filter Section -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <button class="btn btn-success category-filter" data-category="all">All Solutions</button>
+                    <button class="btn btn-outline-success category-filter" data-category="solar">Solar</button>
+                    <button class="btn btn-outline-success category-filter" data-category="wind">Wind</button>
+                    <button class="btn btn-outline-success category-filter" data-category="biogas">Biogas</button>
+                    <button class="btn btn-outline-success category-filter" data-category="hydro">Hydro</button>
+                    <button class="btn btn-outline-success category-filter" data-category="hybrid">Hybrid</button>
+                    <button class="btn btn-outline-success category-filter" data-category="efficiency">Energy Efficiency</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Solar Energy Solutions -->
+<section class="py-5" id="solar-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Solar Energy Solutions</h2>
+            <p class="lead text-muted">Harness the power of the South African sun for your farm operations</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/images/solarpv.jpeg" class="card-img-top" alt="Solar PV System" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Agricultural Solar PV Systems</h5>
+                        <p class="card-text">Complete photovoltaic systems designed for farm operations. Available in 5kW to 25kW configurations.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-success">Solar</span>
+                            <span class="text-success fw-bold">From R60,000</span>
+                        </div>
+                        <ul class="list-unstyled small text-muted">
+                            <li><i class="bi bi-check-circle text-success"></i> Irrigation systems</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Barn lighting</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Equipment power</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#solutionModal" data-solution="solar-pv">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/images/solarpump.jpeg" class="card-img-top" alt="Solar Water Pumping" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Solar Water Pumping Systems</h5>
+                        <p class="card-text">Eliminate fuel costs with solar-powered irrigation. Submersible and surface pump options available.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-success">Solar</span>
+                            <span class="text-success fw-bold">From R40,000</span>
+                        </div>
+                        <ul class="list-unstyled small text-muted">
+                            <li><i class="bi bi-check-circle text-success"></i> Crop irrigation</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Livestock watering</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Aquaculture systems</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#solutionModal" data-solution="solar-pumping">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/images/solarthermal.jpeg" class="card-img-top" alt="Solar Thermal Systems" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Solar Thermal Systems</h5>
+                        <p class="card-text">Solar water heaters and crop drying systems for processing and preservation operations.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-success">Solar</span>
+                            <span class="text-success fw-bold">From R25,000</span>
+                        </div>
+                        <ul class="list-unstyled small text-muted">
+                            <li><i class="bi bi-check-circle text-success"></i> Water heating</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Crop drying</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Greenhouse heating</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#solutionModal" data-solution="solar-thermal">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Wind Energy Solutions -->
+<section class="py-5 bg-light" id="wind-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Wind Energy Solutions</h2>
+            <p class="lead text-muted">Capture the wind to power your agricultural operations</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/images/windturbine.jpeg" class="card-img-top" alt="Wind Turbines" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Agricultural Wind Turbines</h5>
+                        <p class="card-text">Small to medium-sized wind turbines (3kW-10kW) designed specifically for farm applications with hub heights from 15m to 30m.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-info">Wind</span>
+                            <span class="text-success fw-bold">R80,000 - R350,000</span>
+                        </div>
+                        <ul class="list-unstyled small text-muted">
+                            <li><i class="bi bi-check-circle text-success"></i> Farm electricity</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Irrigation pumping</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Processing facilities</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#solutionModal" data-solution="wind-turbine">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/images/hybridsolarwindsystem.jpg" class="card-img-top" alt="Wind-Solar Hybrid" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Wind-Solar Hybrid Systems</h5>
+                        <p class="card-text">Integrated systems combining wind and solar to provide reliable energy year-round, compensating for seasonal variations.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-secondary">Hybrid</span>
+                            <span class="text-success fw-bold">R150,000 - R500,000</span>
+                        </div>
+                        <ul class="list-unstyled small text-muted">
+                            <li><i class="bi bi-check-circle text-success"></i> Full farm electrification</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Off-grid operations</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Energy security</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#solutionModal" data-solution="wind-solar-hybrid">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Biogas Solutions -->
+<section class="py-5" id="biogas-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Biogas Solutions</h2>
+            <p class="lead text-muted">Convert farm waste into valuable energy resources</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/images/biogasdigester.jpeg" class="card-img-top" alt="Biogas Digester" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Agricultural Biogas Digesters</h5>
+                        <p class="card-text">Convert animal manure and crop residues into biogas for cooking, heating, and electricity generation. Available from 6m³ to 50m³.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-warning text-dark">Biogas</span>
+                            <span class="text-success fw-bold">R30,000 - R200,000</span>
+                        </div>
+                        <ul class="list-unstyled small text-muted">
+                            <li><i class="bi bi-check-circle text-success"></i> Dairy farms</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Piggeries</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Mixed farming</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#solutionModal" data-solution="biogas-digester">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/images/biogasgenerator.jpeg" class="card-img-top" alt="Biogas Generator" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Biogas Generator Sets</h5>
+                        <p class="card-text">Electricity generators specifically designed to run on biogas. Available in 5kW, 10kW, and 20kW models.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-warning text-dark">Biogas</span>
+                            <span class="text-success fw-bold">R45,000 - R150,000</span>
+                        </div>
+                        <ul class="list-unstyled small text-muted">
+                            <li><i class="bi bi-check-circle text-success"></i> Livestock operations</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Processing facilities</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Farm buildings</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#solutionModal" data-solution="biogas-generator">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Energy Efficiency Section -->
+<section class="py-5 bg-light" id="efficiency-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Energy Efficiency Solutions</h2>
+            <p class="lead text-muted">Maximize your energy savings with smart technology</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/images/ledlighting.jpeg" class="card-img-top" alt="LED Lighting" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">LED Lighting Systems</h5>
+                        <p class="card-text">Energy-efficient LED lighting for barns, greenhouses, and facility illumination with smart controls.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-danger">Efficiency</span>
+                            <span class="text-success fw-bold">From R5,000</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#solutionModal" data-solution="led-lighting">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/images/smartirrigation.jpeg" class="card-img-top" alt="Smart Irrigation" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Smart Irrigation Controls</h5>
+                        <p class="card-text">Precision water management systems with sensors and automated controls to optimize water and energy use.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-danger">Efficiency</span>
+                            <span class="text-success fw-bold">From R15,000</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#solutionModal" data-solution="smart-irrigation">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="~/images/variablefrequencydrives.jpeg" class="card-img-top" alt="Variable Frequency Drives" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Variable Frequency Drives</h5>
+                        <p class="card-text">Optimize motor efficiency for pumps, fans, and other equipment with intelligent speed control.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-danger">Efficiency</span>
+                            <span class="text-success fw-bold">From R8,000</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#solutionModal" data-solution="vfd-systems">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-5 bg-success text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="fw-bold">Ready to Transform Your Farm with Green Energy?</h2>
+                <p class="lead">Connect with our verified energy providers and find the perfect renewable solution for your agricultural needs.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <a asp-controller="EnergySolutions" asp-action="RequestQuote" class="btn btn-light btn-lg">Get Free Quote</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Solution Details Modal -->
+<div class="modal fade" id="solutionModal" tabindex="-1" aria-labelledby="solutionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="solutionModalLabel">Solution Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <!-- Content will be loaded dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="requestQuote()">Request Quote</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Category filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.category-filter');
+            const sections = {
+                'all': ['solar-section', 'wind-section', 'biogas-section', 'efficiency-section'],
+                'solar': ['solar-section'],
+                'wind': ['wind-section'],
+                'biogas': ['biogas-section'],
+                'efficiency': ['efficiency-section']
+            };
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+
+                    // Update button states
+                    filterButtons.forEach(btn => btn.classList.remove('btn-success'));
+                    filterButtons.forEach(btn => btn.classList.add('btn-outline-success'));
+                    this.classList.remove('btn-outline-success');
+                    this.classList.add('btn-success');
+
+                    // Show/hide sections
+                    Object.keys(sections).forEach(sectionCategory => {
+                        sections[sectionCategory].forEach(sectionId => {
+                            const section = document.getElementById(sectionId);
+                            if (section) {
+                                section.style.display = 'none';
+                            }
+                        });
+                    });
+
+                    if (sections[category]) {
+                        sections[category].forEach(sectionId => {
+                            const section = document.getElementById(sectionId);
+                            if (section) {
+                                section.style.display = 'block';
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Modal functionality (placeholder)
+            const modal = document.getElementById('solutionModal');
+            modal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const solution = button.getAttribute('data-solution');
+
+                // You would load content based on the solution type
+                const modalContent = document.getElementById('modalContent');
+                modalContent.innerHTML = `<p>Loading details for ${solution}...</p>`;
+
+                // Simulate loading content
+                setTimeout(() => {
+                    modalContent.innerHTML = getSolutionDetails(solution);
+                }, 500);
+            });
+        });
+
+        function getSolutionDetails(solution) {
+            const details = {
+                'solar-pv': `
+                    <h4>Agricultural Solar PV Systems</h4>
+                    <p>Complete photovoltaic systems designed specifically for farm operations.</p>
+                    <h5>Features:</h5>
+                    <ul>
+                        <li>Configurations: 5kW, 10kW, and 25kW systems</li>
+                        <li>Includes: PV panels, inverter, mounting hardware, monitoring system</li>
+                        <li>Professional installation included</li>
+                        <li>25-year warranty on panels</li>
+                    </ul>
+                    <h5>Benefits:</h5>
+                    <ul>
+                        <li>Reduce electricity costs by up to 90%</li>
+                        <li>Low maintenance requirements</li>
+                        <li>ROI within 4-6 years</li>
+                        <li>Environmental impact reduction</li>
+                    </ul>
+                `
+                // Add more solution details as needed
+            };
+
+            return details[solution] || `<p>Details for ${solution} are not available yet.</p>`;
+        }
+
+        function requestQuote() {
+            // Redirect to quote request page
+            window.location.href = '@Url.Action("RequestQuote", "EnergySolution")';
+        }
+    </script>
+}

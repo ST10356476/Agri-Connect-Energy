@@ -1,0 +1,406 @@
+﻿@using Agri_Energy_Connect.ViewModels
+@model Agri_Energy_Connect.ViewModels.CompareSolutionsViewModel
+
+@{
+    ViewData["Title"] = "Compare Energy Solutions";
+}
+
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Compare Energy Solutions</h1>
+        <p class="lead text-muted">Compare up to @CompareSolutionsViewModel.MaxSolutionsToCompare solutions side by side to find the best fit for your farm</p>
+    </div>
+
+    <!-- Selection Area -->
+    @if (Model.SelectedSolutions.Count() < CompareSolutionsViewModel.MaxSolutionsToCompare)
+    {
+        <div class="card mb-4 border-success">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-plus-circle"></i> Add Solutions to Compare
+                    <span class="badge bg-light text-success ms-2">@Model.SelectedSolutions.Count() / @CompareSolutionsViewModel.MaxSolutionsToCompare</span>
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="addSolutionForm" method="get" asp-action="Compare">
+                    <!-- Hidden fields for already selected solutions -->
+                    @foreach (var solution in Model.SelectedSolutions)
+                    {
+                        <input type="hidden" name="solutionIds" value="@solution.SolutionId" />
+                    }
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <select class="form-select" name="solutionIds" id="solutionSelect">
+                                <option value="">Select a solution to add...</option>
+                                @foreach (var solution in Model.AvailableSolutions)
+                                {
+                                    <option value="@solution.SolutionId" data-category="@solution.Category.CategoryName">
+                                        @solution.SolutionName - @solution.Provider.CompanyName
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-plus"></i> Add to Comparison
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+
+    <!-- Comparison Table -->
+    @if (Model.SelectedSolutions.Any())
+    {
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-success">
+                            <tr>
+                                <th style="width: 200px;">Feature</th>
+                                @foreach (var solution in Model.SelectedSolutions)
+                                {
+                                    <th class="text-center">
+                                        <div class="position-relative">
+                                            @if (Model.SelectedSolutions.Count() > 1)
+                                            {
+                                                <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0"
+                                                        onclick="removeSolution(@solution.SolutionId)" style="margin-top: -10px; margin-right: -10px;">
+                                                    <i class="bi bi-x"></i>
+                                                </button>
+                                            }
+                                            <img src="@(!string.IsNullOrEmpty(solution.ImageUrl) ? solution.ImageUrl : "/images/solutions/default.png")"
+                                                 alt="@solution.SolutionName" class="img-fluid rounded mb-2" style="max-height: 100px;">
+                                            <h6 class="mb-0">@solution.SolutionName</h6>
+                                            <small class="text-muted">@solution.Provider.CompanyName</small>
+                                        </div>
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Category -->
+                            <tr>
+                                <td><strong>Category</strong></td>
+                                @foreach (var solution in Model.SelectedSolutions)
+                                {
+                                    <td class="text-center">
+                                        <span class="badge bg-@GetCategoryBadgeClass(solution.Category.CategoryName)">
+                                            @solution.Category.CategoryName
+                                        </span>
+                                    </td>
+                                }
+                            </tr>
+
+                            <!-- Price Range -->
+                            <tr>
+                                <td><strong>Price Range</strong></td>
+                                @foreach (var solution in Model.SelectedSolutions)
+                                {
+                                    <td class="text-center">
+                                        @if (solution.PriceRangeMin.HasValue && solution.PriceRangeMax.HasValue)
+                                        {
+                                            <span class="text-success fw-bold">
+                                                R@solution.PriceRangeMin.Value.ToString("N0") - R@solution.PriceRangeMax.Value.ToString("N0")
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Contact for pricing</span>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+
+                            <!-- ROI Estimate -->
+                            <tr>
+                                <td><strong>ROI Estimate</strong></td>
+                                @foreach (var solution in Model.SelectedSolutions)
+                                {
+                                    <td class="text-center">
+                                        <span class="text-info">
+                                            @(solution.ROIEstimate ?? "Contact for details")
+                                        </span>
+                                    </td>
+                                }
+                            </tr>
+
+                            <!-- Specifications -->
+                            <tr>
+                                <td><strong>Key Specifications</strong></td>
+                                @foreach (var solution in Model.SelectedSolutions)
+                                {
+                                    <td>
+                                        <small class="text-muted">
+                                            @if (!string.IsNullOrEmpty(solution.Specifications))
+                                            {
+                                                @Html.Raw(solution.Specifications.Replace("\n", "<br/>"))
+                                            }
+                                            else
+                                            {
+                                                <em>No specifications available</em>
+                                            }
+                                        </small>
+                                    </td>
+                                }
+                            </tr>
+
+                            <!-- Installation Requirements -->
+                            <tr>
+                                <td><strong>Installation Requirements</strong></td>
+                                @foreach (var solution in Model.SelectedSolutions)
+                                {
+                                    <td>
+                                        <small class="text-muted">
+                                            @if (!string.IsNullOrEmpty(solution.InstallationRequirements))
+                                            {
+                                                @Html.Raw(solution.InstallationRequirements.Replace("\n", "<br/>"))
+                                            }
+                                            else
+                                            {
+                                                <em>Contact provider for details</em>
+                                            }
+                                        </small>
+                                    </td>
+                                }
+                            </tr>
+
+                            <!-- Maintenance -->
+                            <tr>
+                                <td><strong>Maintenance</strong></td>
+                                @foreach (var solution in Model.SelectedSolutions)
+                                {
+                                    <td>
+                                        <small class="text-muted">
+                                            @if (!string.IsNullOrEmpty(solution.MaintenanceInfo))
+                                            {
+                                                @Html.Raw(solution.MaintenanceInfo.Replace("\n", "<br/>"))
+                                            }
+                                            else
+                                            {
+                                                <em>Contact provider for details</em>
+                                            }
+                                        </small>
+                                    </td>
+                                }
+                            </tr>
+
+                            <!-- Application Areas -->
+                            <tr>
+                                <td><strong>Best Used For</strong></td>
+                                @foreach (var solution in Model.SelectedSolutions)
+                                {
+                                    <td>
+                                        <small class="text-muted">
+                                            @if (!string.IsNullOrEmpty(solution.ApplicationAreas))
+                                            {
+                                                @Html.Raw(solution.ApplicationAreas.Replace(",", "<br/>"))
+                                            }
+                                            else
+                                            {
+                                                <em>General farm applications</em>
+                                            }
+                                        </small>
+                                    </td>
+                                }
+                            </tr>
+
+                            <!-- Description -->
+                            <tr>
+                                <td><strong>Description</strong></td>
+                                @foreach (var solution in Model.SelectedSolutions)
+                                {
+                                    <td>
+                                        <small class="text-muted">
+                                            @(solution.Description?.Length > 150 ? solution.Description.Substring(0, 150) + "..." : solution.Description)
+                                        </small>
+                                    </td>
+                                }
+                            </tr>
+
+                            <!-- Action Buttons -->
+                            <tr class="table-light">
+                                <td><strong>Actions</strong></td>
+                                @foreach (var solution in Model.SelectedSolutions)
+                                {
+                                    <td class="text-center">
+                                        <div class="d-grid gap-2">
+                                            <a asp-controller="EnergySolution" asp-action="Details" asp-route-id="@solution.SolutionId"
+                                               class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-eye"></i> View Details
+                                            </a>
+                                            <a asp-controller="EnergySolution" asp-action="RequestQuote" asp-route-solutionId="@solution.SolutionId"
+                                               class="btn btn-success btn-sm">
+                                                <i class="bi bi-chat-quote"></i> Request Quote
+                                            </a>
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="text-center mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <button type="button" class="btn btn-outline-secondary me-md-2" onclick="printComparison()">
+                            <i class="bi bi-printer"></i> Print Comparison
+                        </button>
+                        <button type="button" class="btn btn-outline-success me-md-2" onclick="shareComparison()">
+                            <i class="bi bi-share"></i> Share Comparison
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="requestAllQuotes()">
+                            <i class="bi bi-chat-quote-fill"></i> Request All Quotes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="text-center py-5">
+            <div class="mb-4">
+                <i class="bi bi-layers text-muted" style="font-size: 4rem;"></i>
+            </div>
+            <h3>No Solutions Selected</h3>
+            <p class="text-muted">Start by selecting energy solutions from our marketplace to compare them here.</p>
+            <a asp-controller="EnergySolution" asp-action="Index" class="btn btn-success btn-lg">
+                <i class="bi bi-lightning"></i> Browse Energy Solutions
+            </a>
+        </div>
+    }
+
+    <!-- Comparison Tips -->
+    <div class="mt-5">
+        <div class="card border-info">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-lightbulb"></i> Comparison Tips</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-info">Consider Your Needs</h6>
+                        <ul class="small">
+                            <li>Match the solution to your farm size and energy requirements</li>
+                            <li>Consider your local climate and natural resources</li>
+                            <li>Think about your budget and available financing options</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-info">Evaluate Long-term Value</h6>
+                        <ul class="small">
+                            <li>Look beyond initial cost to total return on investment</li>
+                            <li>Consider maintenance requirements and ongoing costs</li>
+                            <li>Factor in potential grants and subsidies available</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetCategoryBadgeClass(string categoryName)
+    {
+        return categoryName.ToLower() switch
+        {
+            "solar" => "success",
+            "wind" => "info",
+            "biogas" => "warning",
+            "hydro" => "primary",
+            "hybrid" => "secondary",
+            "energy efficiency" => "danger",
+            _ => "secondary"
+        };
+    }
+}
+
+@section Scripts {
+    <script>
+        function removeSolution(solutionId) {
+            // Get current URL and parse query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const solutionIds = urlParams.getAll('solutionIds');
+
+            // Remove the solution ID
+            const newSolutionIds = solutionIds.filter(id => id !== solutionId.toString());
+
+            // Rebuild URL with remaining solutions
+            const newUrl = '@Url.Action("Compare", "EnergySolution")' +
+                (newSolutionIds.length > 0 ? '?' + newSolutionIds.map(id => 'solutionIds=' + id).join('&') : '');
+
+            window.location.href = newUrl;
+        }
+
+        function printComparison() {
+            window.print();
+        }
+
+        function shareComparison() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Energy Solutions Comparison - Agri-Energy Connect',
+                    text: 'Check out this comparison of renewable energy solutions for farms',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: Copy to clipboard
+                navigator.clipboard.writeText(window.location.href).then(function() {
+                    alert('Comparison link copied to clipboard!');
+                });
+            }
+        }
+
+        function requestAllQuotes() {
+            // Get all solution IDs from the current comparison
+            const solutionIds = [];
+        @foreach (var solution in Model.SelectedSolutions)
+        {
+            @:solutionIds.push(@solution.SolutionId);
+        }
+
+            // Create a form with checkboxes for all solutions
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("RequestMultipleQuotes", "EnergySolution")';
+
+            // Add anti-forgery token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '__RequestVerificationToken';
+            tokenInput.value = token;
+            form.appendChild(tokenInput);
+
+            // Add solution IDs
+            solutionIds.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'solutionIds';
+                input.value = id;
+                form.appendChild(input);
+            });
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // Auto-submit form when solution is selected
+        document.getElementById('solutionSelect').addEventListener('change', function() {
+            document.getElementById('addSolutionForm').submit();
+        });
+    </script>
+}
